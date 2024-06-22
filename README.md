@@ -22,6 +22,8 @@ This is an experimental project!! The main objective of this project is to creat
 
 - Pandas
 - StreamLit
+- Seaborn
+- MathplotLib
 
 ## How to run
 
