@@ -19,9 +19,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-#Sidebar config
-st.sidebar.title('Select Country')
-
 #Calling the merged_df
 renw = EnergyProduction('./Data/Raw/EnergyProduction.csv')
 gdp = CountriesGDP('./Data/Raw/CountriesGDP.csv')
@@ -29,6 +26,38 @@ gdp = CountriesGDP('./Data/Raw/CountriesGDP.csv')
 #Merging Renewable and GDP
 merged_df = pd.merge(renw,gdp, how='inner')\
     .sort_values('year')
+
+################# SIDEBAR
+
+#Sidebar config
+st.sidebar.title('Select Country')
+
+#Selecting the continent
+merged_df = merged_df.sort_values('cntry_region')
+
+cntry_reg = st.sidebar.selectbox("Continent:",merged_df['cntry_region'].unique())
+
+df_c = merged_df.query(
+    'cntry_region == @cntry_reg'
+) 
+df_c = df_c.sort_values('cntry_name')
+
+#Selecting the country
+cntry = st.sidebar.selectbox("Country:",df_c['cntry_name'].unique())
+
+df_selection = df_c.query(
+    'cntry_name == @cntry'
+)
+df_selection = df_selection.sort_values('year')
+
+#Time Range
+time_range = st.sidebar.slider(
+    'Time range:',
+    1990, 2015, (1990, 2015)
+)
+
+df_selection = df_selection[(df_selection['year'] >= time_range[0])&(df_selection['year'] <= time_range[1])]
+renw = renw[(renw['year'] >= time_range[0])&(renw['year'] <= time_range[1])]
 
 
 st.title(":bar_chart: Renewable Integration Dashboard")
