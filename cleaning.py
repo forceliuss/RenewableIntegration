@@ -10,7 +10,7 @@ import numpy as np
 ######## Creating the country database
 def Countries():
     #Import country names, codes and regions
-    df = pd.read_csv('./data/cntry_database.csv', sep=';')
+    df = pd.read_csv('./Data/Raw/CountriesNames.csv', sep=';')
     df = df.rename(columns={'continent' : 'cntry_region','name':'cntry_name','code':'cntry_code'})
     
     #Cleaning the countries dataframe, exclusing the antarctic regions
