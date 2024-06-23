@@ -144,6 +144,39 @@ col3.metric(
 sec_2 = st.container()
 col3, col4 = sec_2.columns(2, gap='large')
 
+#Ploting the total production Year
+fig_total = px.bar(
+    df_selection, 
+    x='year', 
+    y='value',
+    title=f'Renewable Production ({time_range[0]} - {time_range[1]})',
+    labels={
+        'year':'Year',
+        'value':f'Energy Production ({units_total})'
+    }
+)
+
+col3.plotly_chart(
+    fig_total,
+    use_container_width=True
+)
+
+#Ploting the total GDP Year
+gdp_total = px.line(
+    df_selection,
+    x='year',
+    y='gdp',
+    title=f'GDP USD ({time_range[0]} - {time_range[1]}) ',
+    labels={
+        'year':'Year',
+        'gdp':'GDP (USD)' 
+    }
+)
+col4.plotly_chart(
+    gdp_total,
+    use_container_width=True
+)
+
 #################  RESET STREAMLIT
 hide_st_style="""
             <style>
