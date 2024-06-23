@@ -10,7 +10,7 @@ warnings.filterwarnings('ignore')
 #Importing the cleaning file
 from cleaning import *
 
-################# STREAMLIT PAGE SETUP
+################# PAGE SETUP
 
 st.set_page_config(
     page_title="Renewable Dashboard",
@@ -59,6 +59,11 @@ time_range = st.sidebar.slider(
 df_selection = df_selection[(df_selection['year'] >= time_range[0])&(df_selection['year'] <= time_range[1])]
 renw = renw[(renw['year'] >= time_range[0])&(renw['year'] <= time_range[1])]
 
+#Convert the KToe units to GWh
+on = st.sidebar.toggle('Convert to GWh')
+
+
+################# DASHBOARD CONTENT
 
 st.title(":bar_chart: Renewable Integration Dashboard")
 st.markdown("###")
@@ -71,6 +76,18 @@ sec_1 = st.container()
 sec_1.subheader(cntry, divider='grey')
 col1, col2 = sec_1.columns(2, gap='large')
 
+if on: #Units in GWh
+    units_total = 'GWh'
+    units_aver = 'GWh'
+    df_selection = df_selection[['year','cntry_code','cntry_name','cntry_region','value_gwh','gdp']]\
+        .rename(columns={'value_gwh':'value'})
+    
+else: #Units in Ktoe
+    units_total = 'Ktoe'
+    units_aver = 'Ktoe'
+    df_selection = df_selection[['year','cntry_code','cntry_name','cntry_region','value_ktoe','gdp']]\
+        .rename(columns={'value_ktoe':'value'})
+
 #KPIs
 total_renw = df_selection['value'].sum()
 average_renw = df_selection['value'].mean()
@@ -80,22 +97,30 @@ delta_renw = round(std_renw / average_renw,2)
 #Converting scale of units
 if total_renw >= 1000:
     total_renw = total_renw/1000
+    if on:
+        units_total = 'TWh'
+    else:
+        units_total = 'Mtoe'
 
 
 if average_renw >= 1000:
     average_renw = average_renw/1000
+    if on:
+        units_aver = 'TWh'
+    else:
+        units_aver = 'Mtoe'
 
 #Printing KPI
 
 col1.metric(
     label="Average Production:",
-    value=f'{round(average_renw,1)}',
+    value=f'{round(average_renw,1)} {units_aver}',
     delta=delta_renw,
 )
 
 col2.metric(
     label="Total Production:",
-    value=f'{round(total_renw,1)}',
+    value=f'{round(total_renw,1)} {units_total}',
 )
 
 
