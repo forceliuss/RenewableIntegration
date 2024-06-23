@@ -71,6 +71,33 @@ sec_1 = st.container()
 sec_1.subheader(cntry, divider='grey')
 col1, col2 = sec_1.columns(2, gap='large')
 
+#KPIs
+total_renw = df_selection['value'].sum()
+average_renw = df_selection['value'].mean()
+std_renw = df_selection['value'].std()
+delta_renw = round(std_renw / average_renw,2)
+
+#Converting scale of units
+if total_renw >= 1000:
+    total_renw = total_renw/1000
+
+
+if average_renw >= 1000:
+    average_renw = average_renw/1000
+
+#Printing KPI
+
+col1.metric(
+    label="Average Production:",
+    value=f'{round(average_renw,1)}',
+    delta=delta_renw,
+)
+
+col2.metric(
+    label="Total Production:",
+    value=f'{round(total_renw,1)}',
+)
+
 
 ################# Section 2 - Charts
 
