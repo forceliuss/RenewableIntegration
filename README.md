@@ -1,6 +1,8 @@
 # RenewableIntegration
 
-This is an experimental project!! The main objective of this project is to create a dashboard to analyse the data from several sources and develop a common place for these insights.
+This is an experimental project!! The main objective of this project is to create a dashboard to analyze the data from several sources and develop a common place for these insights.
+
+![image](https://github.com/forceliuss/renewable_integration/assets/72661072/69a730f8-d56c-43ae-84e6-6d45ec5d27dc)
 
 ## Datasets
 
@@ -28,6 +30,9 @@ This is an experimental project!! The main objective of this project is to creat
 ## How to run
 
 1. Clone this project
-2. Run your python kernel
-3. Install all the libraries above
-4. Run `app.py` through the streamlit command `streamlit run app.py`
+   ```git clone https://github.com/forceliuss/RenewableIntegration.git```
+3. Run your python kernel
+4. Install all the libraries above
+   ```pip install -r requirements.txt```
+6. Run `app.py` through the streamlit command
+   ```streamlit run app.py```
