@@ -27,6 +27,12 @@ gdp = CountriesGDP('./Data/Raw/CountriesGDP.csv')
 merged_df = pd.merge(renw,gdp, how='inner')\
     .sort_values('year')
 
+#Ranking
+df_ranking = renw[['cntry_name','value_ktoe']]
+df_ranking = df_ranking.groupby(by=['cntry_name']).sum()\
+    .sort_values('value_ktoe', ascending=False)
+df_ranking['ranking'] = range(1, len(df_ranking['value_ktoe']) + 1)
+
 ################# SIDEBAR
 
 #Sidebar config
@@ -59,6 +65,10 @@ time_range = st.sidebar.slider(
 df_selection = df_selection[(df_selection['year'] >= time_range[0])&(df_selection['year'] <= time_range[1])]
 renw = renw[(renw['year'] >= time_range[0])&(renw['year'] <= time_range[1])]
 
+world_ranking = df_ranking.query(
+    'cntry_name == @cntry'
+)
+
 #Convert the KToe units to GWh
 on = st.sidebar.toggle('Convert to GWh')
 
@@ -74,7 +84,7 @@ st.caption('Renewables include the primary energy equivalent of hydro (excluding
 
 sec_1 = st.container()
 sec_1.subheader(cntry, divider='grey')
-col1, col2 = sec_1.columns(2, gap='large')
+col1, col2, col3 = sec_1.columns(3, gap='large')
 
 if on: #Units in GWh
     units_total = 'GWh'
@@ -121,6 +131,11 @@ col1.metric(
 col2.metric(
     label="Total Production:",
     value=f'{round(total_renw,1)} {units_total}',
+)
+
+col3.metric(
+    label=":star2: World Ranking:",
+    value=f"{world_ranking['ranking'].values[0]}º"
 )
 
 
